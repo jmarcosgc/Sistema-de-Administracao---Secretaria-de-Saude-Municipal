@@ -1,0 +1,18 @@
+import enum
+
+class StatusConsulta(enum.Enum):
+    EM_ATENDIMENTO = "EM_ATENDIMENTO"
+    CONFIRMADA = "CONFIRMADA"
+    REALIZADA = "REALIZADA"
+    CANCELADA = "CANCELADA"
+
+class StatusLote(enum.Enum):
+    VENCIDO = "VENCIDO"
+    DISPONIVEL = "DISPONIVEL"
+    ESGOTADO = "ESGOTADO"
+
+class TipoUsuario(enum.Enum):
+    MEDICO = "MEDICO"
+    FARMACEUTICO = "FARMACEUTICO"
+    RECEPCIONISTA = "RECEPCIONISTA"
+    ADMINISTRADOR = "ADMINISTRADOR"
