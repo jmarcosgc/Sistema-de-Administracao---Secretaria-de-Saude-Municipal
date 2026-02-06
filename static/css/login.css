@@ -1,0 +1,128 @@
+:root {
+    --primary-blue: #4682B4;
+    --dark-blue: #2c3e50;
+    --light-bg: #eef2f5;
+    --white: #ffffff;
+    --error: #d9534f;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /* Gradiente suave de fundo */
+    background: linear-gradient(135deg, #4682B4 0%, #2c3e50 100%);
+}
+
+.login-container {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-header h1 {
+    color: var(--primary-blue);
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.login-header p {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* Inputs */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 15px;
+    color: var(--primary-blue);
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 12px 12px 12px 40px; /* Espaço para o ícone */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.input-wrapper input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 5px rgba(70, 130, 180, 0.3);
+}
+
+/* Botão */
+.btn-entrar {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-entrar:hover {
+    background-color: var(--dark-blue);
+    transform: translateY(-2px);
+}
+
+/* Mensagens e Links */
+.error-message {
+    color: var(--error);
+    font-size: 13px;
+    margin-bottom: 15px;
+    height: 18px; /* Reserva espaço para não pular */
+}
+
+.login-footer {
+    margin-top: 20px;
+    font-size: 13px;
+}
+
+.login-footer a {
+    color: #777;
+    text-decoration: none;
+}
+
+.login-footer a:hover {
+    color: var(--primary-blue);
+    text-decoration: underline;
+}

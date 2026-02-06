@@ -1,19 +1,13 @@
 import os
 from flask import Flask, render_template
 from config import Config
+from api.farmacia.routes import farmacia_bp
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder='templates', static_folder='static')
     app.config.from_object(Config)
 
-
-    @app.route('/')
-    def index():
-        return render_template('index.html')
-    
-    @app.route("/health")
-    def health():
-        return {"status": "ok"}
+    app.register_blueprint(farmacia_bp)
 
     return app
     
