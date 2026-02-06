@@ -63,3 +63,15 @@ class EntregaFarmacia(BaseModel):
     protocolo = db.relationship("Protocolo")
 
     itens = db.relationship("ItemEntregaFarmacia", back_populates="entrega", cascade="all, delete-orphan")
+
+class ItemEntregaFarmacia(BaseModel):
+    __tablename__ = 'ItemEntregaFarmacia'
+
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
+    quantidade = db.Column(db.Integer, nullable=False)
+
+    fkEntrega = db.Column(db.BigInteger, db.ForeignKey('EntregaFarmacia.id'), nullable=False)
+    fkLoteMedicamento = db.Column(db.BigInteger, db.ForeignKey('LoteMedicamento.id'), nullable=False)
+
+    entrega = db.relationship("EntregaFarmacia", back_populates="itens")
+    lote = db.relationship("LoteMedicamento")
