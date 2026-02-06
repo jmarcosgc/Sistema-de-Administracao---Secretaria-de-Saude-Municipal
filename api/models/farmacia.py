@@ -48,15 +48,12 @@ class EntregaFarmacia(BaseModel):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
 
     dataEntrega = db.Column(db.DateTime, nullable=False, server_default=db.func.now())
-    tipoEntrega = db.Column(
-        db.Enum('PROTOCOLO', 'RECEITA_PARTICULAR', name='tipo_entrega'),
-        nullable=False
-    )
+    tipoEntrega = db.Column(db.Enum('PROTOCOLO', 'RECEITA_PARTICULAR', name='tipo_entrega'),  nullable=False)
     justificativa = db.Column(db.Text)
 
     fkPaciente = db.Column(db.BigInteger, db.ForeignKey('Paciente.id'), nullable=False)
     fkFarmaceutico = db.Column(db.BigInteger, db.ForeignKey('Farmaceutico.id'), nullable=False)
-    fkProtocolo = db.Column(db.BigInteger, db.ForeignKey('Protocolo.id'), nullable=True)
+    fkProtocolo = db.Column(db.BigInteger, db.ForeignKey('Protocolo.id'), nullable=True, unique=True)
 
     paciente = db.relationship("Paciente")
     farmaceutico = db.relationship("Farmaceutico")

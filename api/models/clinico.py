@@ -16,10 +16,11 @@ class Protocolo(BaseModel):
     __tablename__ = 'Protocolo'
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     codigo = db.Column(db.String(255))
-    status = db.Column(db.Boolean) # Mapeado bit(1) como Boolean
-    dataGerada = db.Column(db.DateTime)
+    # (ativo, cancelado, expirado etc.)
+    status = db.Column(db.Boolean, default=True) # Mapeado bit(1) como Boolean
+    dataGerada = db.Column(db.DateTime, server_default=db.func.now())
     dataEntrega = db.Column(db.DateTime)
-    fkFarmaceutico = db.Column(db.BigInteger, db.ForeignKey('Farmaceutico.id'))
+    fkFarmaceutico = db.Column(db.BigInteger, db.ForeignKey('Farmaceutico.id'), nullable=True)
 
     farmaceutico = db.relationship("Farmaceutico", back_populates="protocolos")
     consulta = db.relationship("Consulta", back_populates="protocolo", uselist=False)
