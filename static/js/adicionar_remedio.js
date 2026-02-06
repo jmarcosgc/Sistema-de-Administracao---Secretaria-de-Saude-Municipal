@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             qtd_minima: parseInt(inputQtdMin.value) || 0,
             qtd_por_caixa: parseInt(inputQtdCaixa.value) || 0
         };
-
+        console.log(payload)
         if (!payload.nome || !payload.tipo) {
             alert("Preencha Nome e Tipo.");
             return;

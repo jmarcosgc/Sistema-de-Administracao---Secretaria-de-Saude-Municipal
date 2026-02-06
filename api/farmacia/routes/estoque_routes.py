@@ -103,7 +103,8 @@ def api_obter_unico(id):
 
 @estoque_bp.route('/api/salvar', methods=['POST'])
 def api_salvar():
-    data = request.json
+    data = data = request.get_json(force=True)
+
 
     med = Medicamento.query.filter_by(nome=data['nome']).first()
     if not med:
@@ -128,7 +129,7 @@ def api_salvar():
 
 @estoque_bp.route('/api/atualizar/<int:id>', methods=['PUT'])
 def api_atualizar(id):
-    data = request.json
+    data = request.get_json(force=True)
     tipo = TipoMedicamento.query.get_or_404(id)
 
     tipo.tipo = data['tipo']
