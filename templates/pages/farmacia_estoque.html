@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.S.M.S. - Controle de Estoque</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/farmacia_estoque.css') }}">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">S.A.S.M.S.</div>
+        
+        <nav class="nav-buttons">
+            <button class="btn-nav" id="btnEntregar">Entregar</button>
+            <button class="btn-nav active" id="btnEstoque">Estoque</button>
+        </nav>
+
+        <div class="sidebar-footer">
+            Seção: <strong>Farmacêutico</strong>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h2>Estoque</h2>
+            <select class="filter-select">
+                <option>Todos</option>
+                <option>Comprimidos</option>
+                <option>Xaropes</option>
+                <option>Injetáveis</option>
+            </select>
+        </header>
+
+        <div class="toolbar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Pesquisar remédio...">
+                
+            </div>
+            <button class="btn-action btn-primary" id="btnBuscar">Buscar</button>
+            <div class="action-buttons">
+                <button class="btn-action" id="btnNovo">
+                    <i class="fas fa-plus"></i> Novo Med...
+                </button>
+                <button class="btn-action" id="btnEditar">
+                    <i class="fas fa-pen"></i> Editar
+                </button>
+                <button class="btn-action" id="btnRemover">
+                    <i class="fas fa-trash"></i> Remo...
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="tabelaEstoque">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Qtde.</th>
+                        <th>Qtde. min.</th>
+                        <th>Validade</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/farmacia_estoque.js') }}"></script>
+</body>
+</html>
