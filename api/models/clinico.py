@@ -26,7 +26,6 @@ class Protocolo(BaseModel):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     codigo = db.Column(db.String(255))
     status = db.Column(db.Boolean, default=True)
-
     data_gerada = db.Column(db.DateTime, server_default=db.func.now())
     data_entrega = db.Column(db.DateTime)
 
@@ -44,6 +43,7 @@ class Protocolo(BaseModel):
         secondary=protocolo_medicamento,
         back_populates="protocolos"
     )
+
 
 
 class Consulta(BaseModel):
@@ -83,4 +83,4 @@ class Consulta(BaseModel):
 
     medico = db.relationship("Medico", back_populates="consultas")
     paciente = db.relationship("Paciente", back_populates="consultas")
-    protocolo = db.relationship("Protocolo", back_populates="consulta")
+    protocolo = db.relationship("Protocolo", back_populates="consulta", uselist=False)

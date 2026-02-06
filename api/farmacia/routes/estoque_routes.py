@@ -152,3 +152,4 @@ def api_remover(id):
     db.session.delete(tipo)
     db.session.commit()
     return jsonify({"msg": "Removido com sucesso!"})
+
