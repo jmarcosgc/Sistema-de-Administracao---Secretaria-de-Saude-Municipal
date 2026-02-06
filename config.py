@@ -3,7 +3,7 @@ import os
 class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
-        "mysql+pymysql://admin:admin@localhost:3306/dbsistemasaude"
+        "postgresql+psycopg://postgres:postgres@localhost:5432/dbsistemasaude"
     )
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
