@@ -1,27 +1,29 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('loginForm');
-    const msgErro = document.getElementById('msgErro');
+const loginForm = document.getElementById('loginForm');
+const msgErro = document.getElementById('msgErro');
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-        const usuario = document.getElementById('usuario').value;
-        const senha = document.getElementById('senha').value;
+    const usuario = document.getElementById('usuario').value;
+    const senha = document.getElementById('senha').value;
 
-        msgErro.innerText = "";
-        msgErro.style.display = "none";
+    try {
+        const res = await fetch('/auth/autenticar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usuario, senha })
+        });
 
-        try {
-            const resposta = await enviarJson('/auth/autenticar', { usuario, senha });
+        const data = await res.json();
 
-            if (resposta.sucesso) {
-                alert("Login realizado! (Aqui redirecionaria para o home)");
-            }
-
-        } catch (erro) {
-            console.error(erro);
-            msgErro.innerText = erro.message;
-            msgErro.style.display = "block";
+        if (data.sucesso) {
+            // Redireciona para a tela de estoque
+            window.location.href = data.redirect;
+        } else {
+            msgErro.textContent = data.mensagem;
         }
-    });
+    } catch (err) {
+        msgErro.textContent = 'Erro no servidor.';
+        console.error(err);
+    }
 });

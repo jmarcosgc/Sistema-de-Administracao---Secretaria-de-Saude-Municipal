@@ -21,10 +21,6 @@ def page_novo():
         mode='novo'
     )
 
-@estoque_bp.route('/lote-medicamento')
-def page_lote_medicamento():
-    return render_template('pages/farmacia_lote.html')
-
 @estoque_bp.route('/editar/<int:id>')
 def page_editar(id):
     return render_template(
@@ -237,3 +233,46 @@ def api_remover_lote(id):
     db.session.delete(lote)
     db.session.commit()
     return jsonify({"msg": "Lote removido com sucesso!"})
+
+@estoque_bp.route('/api/medicamentos_com_lotes', methods=['GET'])
+def api_medicamentos_com_lotes():
+    medicamentos = []
+
+    tipos = db.session.query(
+        TipoMedicamento.id.label('tipo_id'),
+        TipoMedicamento.tipo,
+        TipoMedicamento.quantidade_caixa,
+        TipoMedicamento.fk_medicamento,
+        Medicamento.nome.label('nome_medicamento')
+    ).join(Medicamento, TipoMedicamento.fk_medicamento == Medicamento.id).all()
+
+    # Lotes
+    for t in tipos:
+        lotes = LoteMedicamento.query.filter_by(fk_tipo_medicamento=t.tipo_id).all()
+        lista_lotes = []
+        for l in lotes:
+            lista_lotes.append({
+                "id": l.id,
+                "quantidade_estoque": l.quantidade_estoque,
+                "data_validade": l.data_validade.strftime('%Y-%m-%d')
+            })
+
+        # Verifica se já existe o medicamento
+        med = next((m for m in medicamentos if m['id'] == t.fk_medicamento), None)
+        tipo_dict = {
+            "id": t.tipo_id,
+            "tipo": t.tipo,
+            "quantidade_caixa": t.quantidade_caixa,
+            "lotes": lista_lotes
+        }
+
+        if med:
+            med['tipo_medicamento'].append(tipo_dict)
+        else:
+            medicamentos.append({
+                "id": t.fk_medicamento,
+                "nome_medicamento": t.nome_medicamento,
+                "tipo_medicamento": [tipo_dict]
+            })
+
+    return jsonify(medicamentos)

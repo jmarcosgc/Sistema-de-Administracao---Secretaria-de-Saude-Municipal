@@ -17,7 +17,7 @@ entrega_bp = Blueprint('entrega', __name__, url_prefix='/entrega')
 
 @entrega_bp.route('/')
 def page_lista():
-    return render_template('pages/farmacia_estoque_novoMedicamento.html')
+    return render_template('pages/farmacia_entrega.html')
 
 
 @entrega_bp.route('/nova')
@@ -176,7 +176,7 @@ def api_confirmar_entrega():
     entrega = EntregaFarmacia(
         tipo_entrega=tipo_entrega, # type: ignore
         justificativa=data.get("justificativa"), # type: ignore
-        fk_paciente=data["fk_paciente"], # type: ignore
+        fk_paciente = data.get("fk_paciente"), # type: ignore
         fk_farmaceutico=data["fk_farmaceutico"], # type: ignore
         fk_protocolo=fk_protocolo # type: ignore
     )

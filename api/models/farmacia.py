@@ -83,7 +83,7 @@ class EntregaFarmacia(BaseModel):
     tipo_entrega = db.Column(db.Enum(TipoEntrega), nullable=False)
     justificativa = db.Column(db.Text)
 
-    fk_paciente = db.Column(db.BigInteger, db.ForeignKey('paciente.id'), nullable=False)
+    fk_paciente = db.Column(db.BigInteger, db.ForeignKey('paciente.id'), nullable=True)
     fk_farmaceutico = db.Column(db.BigInteger, db.ForeignKey('farmaceutico.id'), nullable=False)
     fk_protocolo = db.Column(db.BigInteger, db.ForeignKey('protocolo.id'), unique=True)
 
