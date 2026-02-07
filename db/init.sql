@@ -260,7 +260,39 @@ INSERT INTO farmaceutico (id, crf)
 VALUES ((SELECT id FROM funcionario WHERE matricula = 1003), 'CRF99999');
 
 -- 4️ Opcional: criar usuário no sistema
+-- INSERT INTO usuario_sistema (login, senha, ativo, tipo_user, fk_usuario)
+-- VALUES ('farmacia_teste', '123456', true, 'FARMACEUTICO', (SELECT id FROM funcionario WHERE matricula = 1003));
+
+-- 1. Limpa os usuários antigos para evitar erro de chave única
+DELETE FROM usuario_sistema WHERE login IN ('medico', 'farmacia', 'farmacia_teste');
+
+-- 2. Agora sim, rode os seus INSERTs com as senhas criptografadas:
+INSERT INTO usuario_sistema (login, senha, ativo, tipo_user, fk_usuario) VALUES
+(
+    'medico', 
+    'scrypt:32768:8:1$h3V2oIgut2O0H7Yk$7b351eba97fc0c38ba3c79c6cf12237e44d62cbc6ed7a5533cd96197bd7a0435fecc2df68a2728cd33a4fa600418cef693edfc2a29a78234b79dc92e87d50ddc', 
+    true, 
+    'MEDICO', 
+    1
+),
+(
+    'farmacia', 
+    'scrypt:32768:8:1$iJKW304pidH62btd$d98b72a8c804044881158a5660a87f879176eb5a42eb9d0d5f8222baf0ab1a00e880b3235125b75946a4e51bda7f84e41ffbfe269eb295acff89b804f5d289de', 
+    true, 
+    'FARMACEUTICO', 
+    2
+);
+
 INSERT INTO usuario_sistema (login, senha, ativo, tipo_user, fk_usuario)
+<<<<<<< HEAD
+VALUES (
+    'farmacia_teste', 
+    'scrypt:32768:8:1$iJKW304pidH62btd$d98b72a8c804044881158a5660a87f879176eb5a42eb9d0d5f8222baf0ab1a00e880b3235125b75946a4e51bda7f84e41ffbfe269eb295acff89b804f5d289de', 
+    true, 
+    'FARMACEUTICO', 
+    (SELECT id FROM funcionario WHERE matricula = 1003)
+);
+=======
 VALUES ('farmacia_teste', '123456', true, 'FARMACEUTICO', (SELECT id FROM funcionario WHERE matricula = 1003));
 
 
@@ -348,3 +380,4 @@ BEGIN
         (50, 50, '2025-06-01', '2027-01-31', 'DISPONIVEL', tipo_id);
     END LOOP;
 END$$;
+>>>>>>> 4b080b9ea6ce3f9936f8eb8947bc7ebfd63a2ee0
