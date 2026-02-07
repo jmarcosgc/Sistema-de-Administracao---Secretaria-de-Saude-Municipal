@@ -4,70 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S.A.S.M.S. - Entrega</title>
-    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/farmacia_entrega.css') }}">
-    <!-- <link rel="stylesheet" href="farmacia_entrega.css"> -->
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="logo">S.A.S.M.S.</div>
+<aside class="sidebar">
+    <div class="logo">S.A.S.M.S.</div>
+    <nav class="nav-buttons">
+        <button class="btn-nav active" onclick="window.location.href='/entrega'">Entregar</button>
+        <button class="btn-nav" onclick="window.location.href='/estoque'">Estoque</button>
+        <button class="btn-nav" onclick="window.location.href='/lote'">Lote medic</button>
+    </nav>
+    <div class="sidebar-footer">
+        Seção: <strong>Farmacêutico</strong>
+    </div>
+</aside>
+
+<main class="main-content">
+    <header class="header-center">
+        <h2>Entrega de Remédios</h2>
+    </header>
+
+    <div class="toolbar-entrega">
+        <div class="search-group">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="inputMedicamento" placeholder="Digite o nome do medicamento" autocomplete="off">
+            </div>
+            <div id="listaMedicamentos" class="autocomplete-list"></div>
+            
+            <button class="btn-action btn-primary" id="btnBuscar">Buscar</button>
+            <div id="msgBuscaContainer"></div>
+        </div>
         
-        <nav class="nav-buttons">
-            <button class="btn-nav active" id="btnEntregar" onclick="window.location.href='/entrega'">Entregar</button>
-            <button class="btn-nav" id="btnEstoque"onclick="window.location.href='/estoque'">Estoque</button>
-            <button class="btn-nav" id="btnLote"onclick="window.location.href='/lote'">Lote medic</button>
-        </nav>
+        <button class="btn-action btn-finish" id="btnFinalizar">Finalizar Entrega</button>
+    </div>
 
-        <div class="sidebar-footer">
-            Seção: <strong>Farmacêutico</strong>
-        </div>
-    </aside>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>Qtde.</th>
+                    <th>Qtde. min.</th>
+                    <th>Validade</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+        <div id="emptyMessage" class="empty-message">Nenhum item na tabela</div>
+    </div>
+</main>
 
-    <main class="main-content">
-        <header class="header-center">
-            <h2>Entrega de Remédios</h2>
-        </header>
-
-        <div class="toolbar-entrega">
-            <div class="search-group">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="inputMedicamento" placeholder="Buscar Medicamento">
-                </div>
-                <button class="btn-action btn-primary" id="btnBuscar">Buscar</button>
-            </div>
-            
-            <button class="btn-action btn-finish" id="btnFinalizar">
-                Finalizar Entrega
-            </button>
-        </div>
-
-        <div class="table-container">
-            <table id="tabelaEntrega">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Tipo</th>
-                        <th>Qtde.</th>
-                        <th>Qtde. min.</th>
-                        <th>Validade</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    </tbody>
-            </table>
-            
-            <div id="emptyMessage" class="empty-message" style="display: none;">
-                No content in table
-            </div>
-        </div>
-    </main>
-
-    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/entrega.js') }}"></script>
+<script src="{{ url_for('static', filename='js/api.js') }}"></script>
+<script src="{{ url_for('static', filename='js/entrega.js') }}"></script>
 </body>
 </html>
