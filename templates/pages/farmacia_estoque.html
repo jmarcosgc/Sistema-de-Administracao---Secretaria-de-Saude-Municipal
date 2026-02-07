@@ -16,8 +16,12 @@
         <div class="logo">S.A.S.M.S.</div>
         
         <nav class="nav-buttons">
-            <button class="btn-nav" id="btnEntregar">Entregar</button>
+            <!-- <button class="btn-nav" id="btnEntregar">Entregar</button>
             <button class="btn-nav active" id="btnEstoque">Estoque</button>
+            <button class="btn-nav" id="btnNovoMedicamento">Lote Medicamento</button> -->
+            <button class="btn-nav" id="btnEntregar" onclick="window.location.href='/entrega'">Entregar</button>
+            <button class="btn-nav active" id="btnEstoque" onclick="window.location.href='/estoque'">Estoque</button>
+            <button class="btn-nav" id="btnNovoMedicamento" onclick="window.location.href='/lote'">Lote Medicamento</button>
         </nav>
 
         <div class="sidebar-footer">
@@ -49,9 +53,6 @@
                 </button>
                 <button class="btn-action" id="btnEditar">
                     <i class="fas fa-pen"></i> Editar
-                </button>
-                <button class="btn-action" id="btnRemover">
-                    <i class="fas fa-trash"></i> Remo...
                 </button>
             </div>
         </div>

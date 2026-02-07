@@ -110,11 +110,11 @@ def api_confirmar_entrega():
         return jsonify({"error": "RECEITA_PARTICULAR não deve ter fk_protocolo"}), 400
 
     entrega = EntregaFarmacia(
-        tipo_entrega=tipo_entrega,
-        justificativa=data.get("justificativa"),
-        fk_paciente=data["fk_paciente"],
-        fk_farmaceutico=data["fk_farmaceutico"],
-        fk_protocolo=fk_protocolo
+        tipo_entrega=tipo_entrega, # type: ignore
+        justificativa=data.get("justificativa"), # type: ignore
+        fk_paciente=data["fk_paciente"], # type: ignore
+        fk_farmaceutico=data["fk_farmaceutico"], # type: ignore
+        fk_protocolo=fk_protocolo # type: ignore
     )
 
     db.session.add(entrega)
