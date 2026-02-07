@@ -15,6 +15,6 @@ def autenticar():
     print(f"Tentativa de login: {usuario} com senha {senha}")
 
     if usuario == 'admin' and senha == '1234':
-        return jsonify({"sucesso": True, "mensagem": "Login OK!"})
+        return jsonify({"sucesso": True, "redirect": "/estoque"})
     else:
         return jsonify({"sucesso": False, "mensagem": "Usuário ou senha errados"}), 401

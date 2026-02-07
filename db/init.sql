@@ -154,9 +154,9 @@ CREATE TABLE entrega_farmacia (
   data_entrega TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   tipo_entrega tipo_entrega NOT NULL,
   justificativa TEXT,
-  fk_paciente BIGINT NOT NULL REFERENCES paciente(id),
+  fk_paciente BIGINT DEFAULT NULL REFERENCES paciente(id),
   fk_farmaceutico BIGINT NOT NULL REFERENCES farmaceutico(id),
-  fk_protocolo BIGINT UNIQUE REFERENCES protocolo(id),
+  fk_protocolo BIGINT UNIQUE DEFAULT NULL REFERENCES protocolo(id),
 
   CONSTRAINT chk_entrega_protocolo CHECK (
     (tipo_entrega = 'PROTOCOLO' AND fk_protocolo IS NOT NULL)
@@ -245,3 +245,20 @@ INSERT INTO entrega_farmacia (
   2,
   2
 );
+
+
+-- 1️ Inserir pessoa
+INSERT INTO pessoa (nome, cpf, email, telefone, sexo, data_nascimento, endereco)
+VALUES ('Teste Farmaceutico', '55555555555', 'teste@farmacia.com', '955555555', 'F', '1990-01-01', 'Rua Teste');
+
+-- 2️ Inserir funcionario
+INSERT INTO funcionario (matricula, data_admissao, fk_pessoa)
+VALUES (1003, '2025-01-01', (SELECT id FROM pessoa WHERE cpf = '55555555555'));
+
+-- 3️ Inserir farmaceutico
+INSERT INTO farmaceutico (id, crf)
+VALUES ((SELECT id FROM funcionario WHERE matricula = 1003), 'CRF99999');
+
+-- 4️ Opcional: criar usuário no sistema
+INSERT INTO usuario_sistema (login, senha, ativo, tipo_user, fk_usuario)
+VALUES ('farmacia_teste', '123456', true, 'FARMACEUTICO', (SELECT id FROM funcionario WHERE matricula = 1003));

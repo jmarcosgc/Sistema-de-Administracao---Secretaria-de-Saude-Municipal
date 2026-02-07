@@ -17,9 +17,9 @@
         <div class="logo">S.A.S.M.S.</div>
         
         <nav class="nav-buttons">
-            <button class="btn-nav active" id="btnEntregar">Entregar</button>
-            <button class="btn-nav" id="btnEstoque">Estoque</button>
-            <button class="btn-nav" id="btnLote">Lote medic</button>
+            <button class="btn-nav active" id="btnEntregar" onclick="window.location.href='/entrega'">Entregar</button>
+            <button class="btn-nav" id="btnEstoque"onclick="window.location.href='/estoque'">Estoque</button>
+            <button class="btn-nav" id="btnLote"onclick="window.location.href='/lote'">Lote medic</button>
         </nav>
 
         <div class="sidebar-footer">
@@ -36,7 +36,7 @@
             <div class="search-group">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="inputProtocolo" placeholder="Buscar protocolo">
+                    <input type="text" id="inputMedicamento" placeholder="Buscar Medicamento">
                 </div>
                 <button class="btn-action btn-primary" id="btnBuscar">Buscar</button>
             </div>
@@ -67,6 +67,7 @@
         </div>
     </main>
 
-    <!-- <script src="{{ url_for('static', filename='js/entrega.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/entrega.js') }}"></script>
 </body>
 </html>
