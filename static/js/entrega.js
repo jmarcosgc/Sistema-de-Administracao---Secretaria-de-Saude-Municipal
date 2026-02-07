@@ -1,182 +1,152 @@
-// --- Seletores ---
 const inputMedicamento = document.getElementById('inputMedicamento');
 const btnBuscar = document.getElementById('btnBuscar');
 const tabelaBody = document.getElementById('tableBody');
 const btnFinalizar = document.getElementById('btnFinalizar');
 const emptyMessage = document.getElementById('emptyMessage');
+const listaMedicamentos = document.getElementById('listaMedicamentos');
+const msgBuscaContainer = document.getElementById('msgBuscaContainer');
 
-// Dados temporários da entrega
 let medicamentosEntrega = [];
-let todosMedicamentos = []; // carregados da API
+let todosMedicamentos = []; 
 
-// --- Inicialização: buscar todos medicamentos com lotes ---
+// --- Inicialização ---
 async function carregarMedicamentos() {
     try {
-        todosMedicamentos = await fetch('/estoque/api/medicamentos_com_lotes')
-            .then(r => r.json());
+        const response = await fetch('/estoque/api/medicamentos_com_lotes');
+        todosMedicamentos = await response.json();
     } catch (err) {
-        console.error(err);
-        alert('Erro ao carregar medicamentos do estoque.');
+        console.error('Erro ao carregar medicamentos:', err);
     }
 }
 
-// --- Buscar medicamento pelo nome ---
-btnBuscar.addEventListener('click', () => {
-    const nomeBusca = inputMedicamento.value.trim().toLowerCase();
-    if (!nomeBusca) {
-        alert('Digite o nome do medicamento.');
-        return;
-    }
+// --- Autocomplete ---
+inputMedicamento.addEventListener('input', () => {
+    const query = inputMedicamento.value.trim().toLowerCase();
+    listaMedicamentos.innerHTML = '';
 
-    const medEncontrado = todosMedicamentos.find(m => m.nome_medicamento.toLowerCase().includes(nomeBusca));
-    if (!medEncontrado) {
-        alert('Medicamento não encontrado.');
-        return;
-    }
+    if (!query) return;
 
-    // Criar botão de adicionar
-    let msgBusca = document.getElementById('msgBusca');
-    if (!msgBusca) {
-        msgBusca = document.createElement('small');
-        msgBusca.id = 'msgBusca';
-        msgBusca.style.fontWeight = 'bold';
-        msgBusca.style.display = 'block';
-        inputMedicamento.parentNode.appendChild(msgBusca);
-    }
-    msgBusca.innerHTML = `
-        <strong>${medEncontrado.nome_medicamento}</strong> encontrado.
-        <button id="btnAdicionarMedicamento">Adicionar</button>
-    `;
+    const resultados = todosMedicamentos.filter(med =>
+        med.nome_medicamento.toLowerCase().includes(query)
+    );
 
-    const btnAdicionar = document.getElementById('btnAdicionarMedicamento');
-    btnAdicionar.addEventListener('click', () => {
-        adicionarNaTabela(medEncontrado);
-        inputMedicamento.value = '';
-        msgBusca.innerHTML = '';
+    resultados.forEach(med => {
+        const div = document.createElement('div');
+        div.classList.add('autocomplete-item');
+        div.textContent = med.nome_medicamento;
+        div.addEventListener('click', () => {
+            inputMedicamento.value = med.nome_medicamento;
+            listaMedicamentos.innerHTML = '';
+            btnBuscar.click(); // Já dispara a busca ao selecionar
+        });
+        listaMedicamentos.appendChild(div);
     });
 });
 
-// --- Adicionar medicamento na tabela ---
+// Fechar lista ao clicar fora
+document.addEventListener('click', (e) => {
+    if (e.target !== inputMedicamento) {
+        listaMedicamentos.innerHTML = '';
+    }
+});
+
+// --- Buscar e Sugerir Adição ---
+btnBuscar.addEventListener('click', () => {
+    const nomeBusca = inputMedicamento.value.trim().toLowerCase();
+    if (!nomeBusca) return;
+
+    const medEncontrado = todosMedicamentos.find(m => 
+        m.nome_medicamento.toLowerCase() === nomeBusca
+    );
+
+    if (!medEncontrado) {
+        alert('Medicamento não encontrado no estoque.');
+        return;
+    }
+
+    msgBuscaContainer.innerHTML = `
+        <span><strong>${medEncontrado.nome_medicamento}</strong> encontrado.</span>
+        <button id="btnAdicionarMedicamento">Adicionar à Lista</button>
+    `;
+
+    document.getElementById('btnAdicionarMedicamento').addEventListener('click', () => {
+        adicionarNaTabela(medEncontrado);
+        inputMedicamento.value = '';
+        msgBuscaContainer.innerHTML = '';
+    });
+});
+
+// --- Gerenciar Tabela ---
 function adicionarNaTabela(med) {
     const row = document.createElement('tr');
 
-    // Nome
-    const tdNome = document.createElement('td');
-    tdNome.textContent = med.nome_medicamento;
-    row.appendChild(tdNome);
-
-    // Tipo
-    const tdTipo = document.createElement('td');
-    const selectTipo = document.createElement('select');
-    selectTipo.innerHTML = '<option value="">Selecione...</option>';
-    tdTipo.appendChild(selectTipo);
-    row.appendChild(tdTipo);
-
-    // Quantidade
-    const tdQtd = document.createElement('td');
-    const selectQtd = document.createElement('select');
-    selectQtd.innerHTML = '<option value="">0</option>';
-    tdQtd.appendChild(selectQtd);
-    row.appendChild(tdQtd);
-
-    // Qtde mínima
-    const tdQtdMin = document.createElement('td');
-    const inputQtdMin = document.createElement('input');
-    inputQtdMin.type = 'number';
-    inputQtdMin.min = 0;
-    inputQtdMin.value = 0;
-    tdQtdMin.appendChild(inputQtdMin);
-    row.appendChild(tdQtdMin);
-
-    // Validade
-    const tdValidade = document.createElement('td');
-    const selectLote = document.createElement('select');
-    selectLote.innerHTML = '<option value="">Selecione...</option>';
-    tdValidade.appendChild(selectLote);
-    row.appendChild(tdValidade);
+    row.innerHTML = `
+        <td>${med.nome_medicamento}</td>
+        <td><select class="select-tipo"><option value="">Selecione...</option></select></td>
+        <td><select class="select-qtd" disabled><option value="">0</option></select></td>
+        <td><input type="number" class="input-qtd-min" min="0" value="0"></td>
+        <td><select class="select-lote" disabled><option value="">Selecione...</option></select></td>
+    `;
 
     tabelaBody.appendChild(row);
     emptyMessage.style.display = 'none';
 
-    medicamentosEntrega.push({
-        medId: med.id,
-        row,
-        selectTipo,
-        selectQtd,
-        selectLote,
-        inputQtdMin,
-        tipos: med.tipo_medicamento
-    });
-
-    preencherTiposETipos(med.id);
-}
-
-// --- Preencher tipos, quantidade e lotes ---
-function preencherTiposETipos(medId) {
-    const item = medicamentosEntrega.find(m => m.medId === medId);
-    if (!item) return;
+    const selectTipo = row.querySelector('.select-tipo');
+    const selectQtd = row.querySelector('.select-qtd');
+    const selectLote = row.querySelector('.select-lote');
+    const inputQtdMin = row.querySelector('.input-qtd-min');
 
     // Preencher tipos
-    item.selectTipo.innerHTML = '<option value="">Selecione...</option>';
-    item.tipos.forEach(t => {
+    med.tipo_medicamento.forEach(t => {
         const opt = document.createElement('option');
         opt.value = t.id;
         opt.textContent = t.tipo;
-        item.selectTipo.appendChild(opt);
+        selectTipo.appendChild(opt);
     });
-    item.selectTipo.disabled = false;
 
-    // Ao selecionar tipo
-    item.selectTipo.addEventListener('change', () => {
-        const tipoSelecionado = item.tipos.find(t => t.id == item.selectTipo.value);
-        if (!tipoSelecionado) return;
+    selectTipo.addEventListener('change', () => {
+        const tipoSel = med.tipo_medicamento.find(t => t.id == selectTipo.value);
+        if (!tipoSel) return;
 
-        // Quantidade
-        item.selectQtd.innerHTML = '';
-        for (let i = 1; i <= tipoSelecionado.quantidade_caixa; i++) {
+        // Qtd disponível
+        selectQtd.innerHTML = '';
+        for (let i = 1; i <= tipoSel.quantidade_caixa; i++) {
             const opt = document.createElement('option');
-            opt.value = i;
-            opt.textContent = i;
-            item.selectQtd.appendChild(opt);
+            opt.value = i; opt.textContent = i;
+            selectQtd.appendChild(opt);
         }
-        item.selectQtd.disabled = false;
+        selectQtd.disabled = false;
 
-        // Validade: lote mais próximo do vencimento
-        const lotesValidos = tipoSelecionado.lotes
+        // Lotes
+        const lotesValidos = tipoSel.lotes
             .filter(l => l.quantidade_estoque > 0)
             .sort((a, b) => new Date(a.data_validade) - new Date(b.data_validade));
 
-        item.selectLote.innerHTML = '';
-        lotesValidos.forEach(lote => {
+        selectLote.innerHTML = '';
+        lotesValidos.forEach(l => {
             const opt = document.createElement('option');
-            opt.value = lote.id;
-            opt.textContent = `${lote.quantidade_estoque} un. - Validade: ${lote.data_validade}`;
-            item.selectLote.appendChild(opt);
+            opt.value = l.id;
+            opt.textContent = `${l.quantidade_estoque} un - Venc: ${l.data_validade}`;
+            selectLote.appendChild(opt);
         });
-        item.selectLote.disabled = lotesValidos.length === 0;
+        selectLote.disabled = lotesValidos.length === 0;
     });
+
+    medicamentosEntrega.push({ medId: med.id, selectTipo, selectQtd, selectLote, inputQtdMin });
 }
 
-// --- Finalizar entrega ---
+// --- Finalizar ---
 btnFinalizar.addEventListener('click', async () => {
-    const itens = [];
+    if (medicamentosEntrega.length === 0) return alert('Adicione medicamentos primeiro.');
 
-    for (let item of medicamentosEntrega) {
-        const tipoId = item.selectTipo.value;
-        const loteId = item.selectLote.value;
-        const quantidade = parseInt(item.selectQtd.value);
-        const qtdMin = parseInt(item.inputQtdMin.value);
+    const itens = medicamentosEntrega.map(item => ({
+        tipo_id: item.selectTipo.value,
+        lote_id: item.selectLote.value,
+        quantidade: parseInt(item.selectQtd.value)
+    }));
 
-        if (!tipoId || !loteId || !quantidade || quantidade <= 0) {
-            alert('Preencha todos os campos corretamente antes de finalizar.');
-            return;
-        }
-
-        itens.push({
-            tipo_id: tipoId,
-            lote_id: loteId,
-            quantidade
-        });
+    if (itens.some(i => !i.tipo_id || !i.lote_id)) {
+        return alert('Preencha todos os campos da tabela.');
     }
 
     const payload = {
@@ -188,17 +158,12 @@ btnFinalizar.addEventListener('click', async () => {
     };
 
     try {
-        const resultado = await enviarJson('/entrega/api/confirmar', payload);
-        alert(resultado.msg);
-        tabelaBody.innerHTML = '';
-        inputMedicamento.value = '';
-        medicamentosEntrega = [];
-        emptyMessage.style.display = 'block';
+        const res = await enviarJson('/entrega/api/confirmar', payload);
+        alert(res.msg);
+        location.reload(); 
     } catch (err) {
-        console.error(err);
-        alert('Erro ao finalizar entrega: ' + err.message);
+        alert('Erro: ' + err.message);
     }
 });
 
-// --- Inicializar ---
 carregarMedicamentos();
