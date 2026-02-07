@@ -23,10 +23,7 @@ def page_novo():
 
 @estoque_bp.route('/lote-medicamento')
 def page_lote_medicamento():
-    return render_template(
-        'pages/farmacia_estoque_lotes.html',
-        mode='novo'
-    )
+    return render_template('pages/farmacia_lote.html')
 
 @estoque_bp.route('/editar/<int:id>')
 def page_editar(id):
