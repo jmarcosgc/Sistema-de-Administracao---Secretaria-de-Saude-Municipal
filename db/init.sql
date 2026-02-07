@@ -284,6 +284,7 @@ INSERT INTO usuario_sistema (login, senha, ativo, tipo_user, fk_usuario) VALUES
 );
 
 INSERT INTO usuario_sistema (login, senha, ativo, tipo_user, fk_usuario)
+<<<<<<< HEAD
 VALUES (
     'farmacia_teste', 
     'scrypt:32768:8:1$iJKW304pidH62btd$d98b72a8c804044881158a5660a87f879176eb5a42eb9d0d5f8222baf0ab1a00e880b3235125b75946a4e51bda7f84e41ffbfe269eb295acff89b804f5d289de', 
@@ -291,3 +292,92 @@ VALUES (
     'FARMACEUTICO', 
     (SELECT id FROM funcionario WHERE matricula = 1003)
 );
+=======
+VALUES ('farmacia_teste', '123456', true, 'FARMACEUTICO', (SELECT id FROM funcionario WHERE matricula = 1003));
+
+
+-- =========================
+-- Inserir 10 medicamentos
+-- =========================
+
+INSERT INTO medicamento (nome) VALUES
+('Amoxicilina'),
+('Ibuprofeno'),
+('Omeprazol'),
+('Metformina'),
+('Losartana'),
+('Simvastatina'),
+('Azitromicina'),
+('Prednisona'),
+('Cloridrato de Fluoxetina'),
+('Cetirizina');
+
+-- =========================
+-- Inserir 2 tipos para cada medicamento
+-- =========================
+
+-- Amoxicilina
+INSERT INTO tipo_medicamento (descricao, tipo, unidade_medida, quantidade_caixa, estoque_minimo, fk_medicamento) VALUES
+('Amoxicilina 500mg', 'Comprimido', 'mg', 20, 10, 1),
+('Amoxicilina 250mg', 'Comprimido', 'mg', 20, 10, 1);
+
+-- Ibuprofeno
+INSERT INTO tipo_medicamento (descricao, tipo, unidade_medida, quantidade_caixa, estoque_minimo, fk_medicamento) VALUES
+('Ibuprofeno 400mg', 'Comprimido', 'mg', 20, 10, 2),
+('Ibuprofeno 600mg', 'Comprimido', 'mg', 20, 10, 2);
+
+-- Omeprazol
+INSERT INTO tipo_medicamento (descricao, tipo, unidade_medida, quantidade_caixa, estoque_minimo, fk_medicamento) VALUES
+('Omeprazol 20mg', 'Comprimido', 'mg', 14, 5, 3),
+('Omeprazol 40mg', 'Comprimido', 'mg', 14, 5, 3);
+
+-- Metformina
+INSERT INTO tipo_medicamento (descricao, tipo, unidade_medida, quantidade_caixa, estoque_minimo, fk_medicamento) VALUES
+('Metformina 500mg', 'Comprimido', 'mg', 30, 10, 4),
+('Metformina 850mg', 'Comprimido', 'mg', 30, 10, 4);
+
+-- Losartana
+INSERT INTO tipo_medicamento (descricao, tipo, unidade_medida, quantidade_caixa, estoque_minimo, fk_medicamento) VALUES
+('Losartana 50mg', 'Comprimido', 'mg', 30, 10, 5),
+('Losartana 100mg', 'Comprimido', 'mg', 30, 10, 5);
+
+-- Simvastatina
+INSERT INTO tipo_medicamento (descricao, tipo, unidade_medida, quantidade_caixa, estoque_minimo, fk_medicamento) VALUES
+('Simvastatina 20mg', 'Comprimido', 'mg', 20, 5, 6),
+('Simvastatina 40mg', 'Comprimido', 'mg', 20, 5, 6);
+
+-- Azitromicina
+INSERT INTO tipo_medicamento (descricao, tipo, unidade_medida, quantidade_caixa, estoque_minimo, fk_medicamento) VALUES
+('Azitromicina 500mg', 'Comprimido', 'mg', 6, 2, 7),
+('Azitromicina 250mg', 'Comprimido', 'mg', 6, 2, 7);
+
+-- Prednisona
+INSERT INTO tipo_medicamento (descricao, tipo, unidade_medida, quantidade_caixa, estoque_minimo, fk_medicamento) VALUES
+('Prednisona 5mg', 'Comprimido', 'mg', 20, 5, 8),
+('Prednisona 20mg', 'Comprimido', 'mg', 20, 5, 8);
+
+-- Fluoxetina
+INSERT INTO tipo_medicamento (descricao, tipo, unidade_medida, quantidade_caixa, estoque_minimo, fk_medicamento) VALUES
+('Fluoxetina 20mg', 'Comprimido', 'mg', 28, 10, 9),
+('Fluoxetina 40mg', 'Comprimido', 'mg', 28, 10, 9);
+
+-- Cetirizina
+INSERT INTO tipo_medicamento (descricao, tipo, unidade_medida, quantidade_caixa, estoque_minimo, fk_medicamento) VALUES
+('Cetirizina 10mg', 'Comprimido', 'mg', 10, 5, 10),
+('Cetirizina 5mg', 'Comprimido', 'mg', 10, 5, 10);
+
+-- =========================
+-- Inserir 2 lotes por tipo de medicamento
+-- =========================
+
+DO $$
+DECLARE
+    tipo_id BIGINT;
+BEGIN
+    FOR tipo_id IN SELECT id FROM tipo_medicamento LOOP
+        INSERT INTO lote_medicamento (quantidade_entrada, quantidade_estoque, data_fabricacao, data_validade, status, fk_tipo_medicamento) VALUES
+        (100, 100, '2025-01-01', '2026-12-31', 'DISPONIVEL', tipo_id),
+        (50, 50, '2025-06-01', '2027-01-31', 'DISPONIVEL', tipo_id);
+    END LOOP;
+END$$;
+>>>>>>> 4b080b9ea6ce3f9936f8eb8947bc7ebfd63a2ee0
