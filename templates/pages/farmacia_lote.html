@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.S.M.S. - Entrada de Lote</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/farmacia_lote.css') }}">
+    <!-- <link rel="stylesheet" href="farmacia_lote.css"> -->
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">S.A.S.M.S.</div>
+        
+        <nav class="nav-buttons">
+            <button class="btn-nav" onclick="window.location.href='/entrega'">Entregar</button>
+            <button class="btn-nav" onclick="window.location.href='/estoque'">Estoque</button>
+            <button class="btn-nav active" onclick="window.location.href='/lote'">Lote Medic</button>
+        </nav>
+
+        <div class="sidebar-footer">
+            Seção: <strong>Farmacêutico</strong>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <h2 class="page-title">Entrada de Lote</h2>
+
+        <div class="form-container">
+            
+            <div class="form-group-search">
+                <label>Pesquisar medicamento:</label>
+                <div class="search-wrapper">
+                    <input type="text" id="inputBusca" placeholder="Digite o nome (ex: Dipirona)">
+                    <button id="btnBuscarMedicamento" class="btn-search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <small id="msgBusca" style="margin-top: 8px; display: block; font-weight: bold;"></small>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Tipo:</label>
+                    <select id="selectTipo" class="input-detail" disabled>
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Unidade:</label>
+                    <input type="text" id="inputUnidade" class="input-detail" readonly>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Qtde. Estoque:</label>
+                    <input type="number" id="inputQtd" class="input-detail" placeholder="0">
+                </div>
+
+                <div class="input-group">
+                    <label>Data de Validade:</label>
+                    <input type="date" id="inputValidade" class="input-detail">
+                </div>
+            </div>
+
+            <div class="footer-action">
+                <button id="btnSalvarLote" class="btn-cadastrar">
+                    <i class="fas fa-save"></i> Salvar Lote
+                </button>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lote.js') }}"></script> -->
+</body>
+</html>

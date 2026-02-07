@@ -174,11 +174,11 @@ def api_confirmar_entrega():
 
     # --- Criar registro de entrega ---
     entrega = EntregaFarmacia(
-        tipo_entrega=tipo_entrega,
-        justificativa=data.get("justificativa"),
-        fk_paciente=data["fk_paciente"],
-        fk_farmaceutico=data["fk_farmaceutico"],
-        fk_protocolo=fk_protocolo
+        tipo_entrega=tipo_entrega, # type: ignore
+        justificativa=data.get("justificativa"), # type: ignore
+        fk_paciente=data["fk_paciente"], # type: ignore
+        fk_farmaceutico=data["fk_farmaceutico"], # type: ignore
+        fk_protocolo=fk_protocolo # type: ignore
     )
     db.session.add(entrega)
     db.session.flush()  # ainda não confirma, mas permite usar o ID se necessário

@@ -114,18 +114,18 @@ def api_salvar():
 
     med = Medicamento.query.filter_by(nome=data['nome']).first()
     if not med:
-        med = Medicamento(nome=data['nome'])
+        med = Medicamento(nome=data['nome']) # type: ignore
         db.session.add(med)
         db.session.flush()
 
     novo_tipo = TipoMedicamento(
-        descricao=data.get('descricao', ''),
-        tipo=data['tipo'],
-        unidade_medida=data['unidade'],
-        quantidade_caixa=data['qtd_por_caixa'],
-        estoque_minimo=data['qtd_minima'],
-        fk_medicamento=med.id
-    )
+        descricao=data.get('descricao', ''), # type: ignore
+        tipo=data['tipo'], # type: ignore
+        unidade_medida=data['unidade'], # type: ignore
+        quantidade_caixa=data['qtd_por_caixa'], # type: ignore
+        estoque_minimo=data['qtd_minima'], # type: ignore
+        fk_medicamento=med.id # type: ignore
+    ) 
 
     db.session.add(novo_tipo)
     db.session.commit()
