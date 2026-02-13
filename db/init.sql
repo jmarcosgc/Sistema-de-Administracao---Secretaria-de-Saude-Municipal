@@ -284,7 +284,6 @@ INSERT INTO usuario_sistema (login, senha, ativo, tipo_user, fk_usuario) VALUES
 );
 
 INSERT INTO usuario_sistema (login, senha, ativo, tipo_user, fk_usuario)
-<<<<<<< HEAD
 VALUES (
     'farmacia_teste', 
     'scrypt:32768:8:1$iJKW304pidH62btd$d98b72a8c804044881158a5660a87f879176eb5a42eb9d0d5f8222baf0ab1a00e880b3235125b75946a4e51bda7f84e41ffbfe269eb295acff89b804f5d289de', 
@@ -292,7 +291,7 @@ VALUES (
     'FARMACEUTICO', 
     (SELECT id FROM funcionario WHERE matricula = 1003)
 );
-=======
+
 VALUES ('farmacia_teste', '123456', true, 'FARMACEUTICO', (SELECT id FROM funcionario WHERE matricula = 1003));
 
 
@@ -380,4 +379,3 @@ BEGIN
         (50, 50, '2025-06-01', '2027-01-31', 'DISPONIVEL', tipo_id);
     END LOOP;
 END$$;
->>>>>>> 4b080b9ea6ce3f9936f8eb8947bc7ebfd63a2ee0
