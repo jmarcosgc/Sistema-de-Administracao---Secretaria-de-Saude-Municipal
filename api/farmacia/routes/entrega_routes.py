@@ -154,8 +154,8 @@ def api_confirmar_entrega():
         "fk_protocolo": 3,        # se for PROTOCOLO
         "justificativa": "...",
         "itens": [
-            {"tipo_id": 1, "lote_id": 10, "quantidade": 2},
-            {"tipo_id": 1, "lote_id": 11, "quantidade": 3}
+            {"lote_id": 10, "quantidade": 2},
+            {"lote_id": 11, "quantidade": 3}
         ]
     }
     """

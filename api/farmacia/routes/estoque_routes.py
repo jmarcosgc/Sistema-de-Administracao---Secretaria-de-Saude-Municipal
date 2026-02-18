@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request
+from api.models.enums import StatusLote
 from extensions import db
 from sqlalchemy import func
 
@@ -236,43 +237,35 @@ def api_remover_lote(id):
 
 @estoque_bp.route('/api/medicamentos_com_lotes', methods=['GET'])
 def api_medicamentos_com_lotes():
-    medicamentos = []
+    medicamentosRetorno = []
 
-    tipos = db.session.query(
-        TipoMedicamento.id.label('tipo_id'),
-        TipoMedicamento.tipo,
-        TipoMedicamento.quantidade_caixa,
-        TipoMedicamento.fk_medicamento,
-        Medicamento.nome.label('nome_medicamento')
-    ).join(Medicamento, TipoMedicamento.fk_medicamento == Medicamento.id).all()
+    medicamentos = Medicamento.query.all()
 
-    # Lotes
-    for t in tipos:
-        lotes = LoteMedicamento.query.filter_by(fk_tipo_medicamento=t.tipo_id).all()
-        lista_lotes = []
-        for l in lotes:
-            lista_lotes.append({
-                "id": l.id,
-                "quantidade_estoque": l.quantidade_estoque,
-                "data_validade": l.data_validade.strftime('%Y-%m-%d')
-            })
+    for m in medicamentos:
+        med = m.to_dict()
+        med['tipos_medicamento'] = []
+        tipos = m.tipos
 
-        # Verifica se já existe o medicamento
-        med = next((m for m in medicamentos if m['id'] == t.fk_medicamento), None)
-        tipo_dict = {
-            "id": t.tipo_id,
-            "tipo": t.tipo,
-            "quantidade_caixa": t.quantidade_caixa,
-            "lotes": lista_lotes
-        }
+        dictTipos = []
+        for t in tipos:
+            dictTipos = t.to_dict()
+            dictTipos['lotes_medicamento'] = []
 
-        if med:
-            med['tipo_medicamento'].append(tipo_dict)
-        else:
-            medicamentos.append({
-                "id": t.fk_medicamento,
-                "nome_medicamento": t.nome_medicamento,
-                "tipo_medicamento": [tipo_dict]
-            })
+            lotes = t.lotes
+            for l in lotes:
+                if l.status == StatusLote.DISPONIVEL:
+                    dictTipos['lotes_medicamento'].append({ 'id': l.id,
+                                                'quantidade_entrada': l.quantidade_entrada,
+                                                'quantidade_estoque': l.quantidade_estoque,
+                                                'data_fabricacao': l.data_fabricacao,
+                                                'data_validade': l.data_validade,
+                                                'fk_tipo_medicamento': l.fk_tipo_medicamento
+                    })
+                
+            med['tipos_medicamento'].append(dictTipos)
 
-    return jsonify(medicamentos)
+        medicamentosRetorno.append(med)
+
+
+    #print(medicamentosRetorno)
+    return jsonify(medicamentosRetorno)
